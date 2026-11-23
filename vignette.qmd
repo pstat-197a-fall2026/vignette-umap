@@ -1,5 +1,22 @@
 ---
-title: "vignette"
+title: "UMAP"
 format: html
 ---
 
+### Introduction
+
+### 
+
+### How it works
+
+UMAP first builds a weighted graph by identifying the k closest neighbors to each data point, like KNN. This graph captures the shape of the data. UMAP then redraws this graph in 2D, using SGD to best retain the neighboring relationship between points. This lower dimensional graph allows you to see possible groupings in the data. You can then refit UMAP with more dimensions than 2, which lets you use it as a tool for dimensionality reduction as well.
+
+### Pros and Cons
+
+- Fast and scalable
+
+-  Works with unsupervised data
+
+- Works with non linear data
+
+- Feature extraction, not selection
