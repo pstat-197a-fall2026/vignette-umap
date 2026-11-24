@@ -1,11 +1,24 @@
 ---
 title: "UMAP"
-format: html
+format: 
+  html:
+    toc: true
+    toc-location: right
 ---
 
 ### Introduction
 
-### 
+#### What is UMAP
+
+UMAP stands for Uniform Manifold Approximation and Projection and has two main functions. The first way UMAP can be used is as a non-linear dimension reduction technique. The second way UMAP can be used is as a way to visualize high-dimensional data.
+
+#### Quick Introduction to Riemannian Manifolds
+
+The assumptions of UMAP are based on Riemannian Manifolds, but what are they? A manifold, in simple terms, is a shape that appears to be flat when zoomed in on. The shape does not need to be strictly flat overall but needs to be approximately flat within a small neighborhood. An example of this is a ball, where if you were to take a microscope and zoom in closely, the shape appears to be flat even though we know the overall shape isn't. Riemannian means that the shape comes with a built-in rule to measure the distances and angles on its surface. Combining these terms together, we get the definition that a Riemannian Manifold is a shape that appears to be flat when zoomed in on that has a built-in rule to measure the distances and angles on its surface. 
+
+#### Assumptions on Data
+
+The first assumption made on the data is that it is uniformly distributed on the Riemannian Manifold. The second is that the Riemannian metric is locally constant or can be approximated as such. This basically means that if you were to zoom into the manifold and look at a small neighborhood, the points would barely change, if at all. Finally, the last assumption is that the manifold is locally connected. This means that there is no single point floating around on its own and that every point is connected to at least one of its nearest neighbors.
 
 ### How it works
 
