@@ -20,3 +20,155 @@ UMAP first builds a weighted graph by identifying the k closest neighbors to eac
 - Works with non linear data
 
 - Feature extraction, not selection
+
+
+
+## Example: Exploring Customer Shopping Patterns with UMAP
+
+### Goal
+
+Imagine a store wants to see whether customers with similar shopping habits tend to behave alike. We have five features for each customer: monthly visits, average spending, online purchases, discount purchases, and returns.
+
+### Apply UMAP
+
+```{r, results = "hide"}
+library(tidyverse)
+library(uwot)
+```
+
+```{r}
+
+# Load example data
+customers <- data.frame(
+  customer = LETTERS[1:12],
+  visits = c(2, 3, 2, 3, 10, 12, 9, 11, 6, 7, 5, 6),
+  avg_spend = c(180, 165, 210, 190, 45, 55, 50, 40, 90, 100, 80, 95),
+  online = c(20, 25, 15, 30, 20, 25, 15, 30, 85, 90, 80, 95),
+  discounts = c(10, 15, 10, 12, 85, 90, 80, 88, 20, 25, 15, 18),
+  returns = c(5, 8, 4, 6, 15, 12, 18, 14, 5, 7, 4, 6)
+)
+
+# Hard coded groups, based on how the data was built
+customers$group <- rep(
+  c("In-store big spenders", "Discount shoppers", "Online shoppers"),
+  each = 4
+)
+
+group_colors <- c(
+  "In-store big spenders" = "#1b9e77",
+  "Discount shoppers"     = "#d95f02",
+  "Online shoppers"       = "#7570b3"
+)
+
+# Select and standardize the customer features
+X <- customers %>% select(-customer, -group)
+X_scaled <- scale(X)
+
+# Reduce the five features to two dimensions
+set.seed(42)
+umap_model <- umap(
+  X_scaled,
+  n_neighbors = 4,
+  min_dist = 0.1,
+  n_components = 2,
+  ret_model = TRUE
+)
+```
+
+UMAP takes the five original features and converts each customer into two new coordinates, UMAP1 and UMAP2. This lets us visualize similarities between customers in a two-dimensional plot.
+
+### Visualize the results
+
+```{r}
+embedding <- as.data.frame(umap_model$embedding)
+
+plot_data <- data.frame(
+  customer = customers$customer,
+  group = customers$group,
+  UMAP1 = embedding[, 1],
+  UMAP2 = embedding[, 2]
+)
+
+ggplot(plot_data, aes(UMAP1, UMAP2, color = group)) +
+  geom_point(size = 10) +
+  geom_text(aes(label = customer), color = "white",
+            fontface = "bold", size = 4) +
+  scale_color_manual(values = group_colors) +
+  labs(title = "Customer Shopping Patterns",
+       color = "Shopper type") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom")
+```
+
+Customers appearing near one another have more similar shopping patterns in the original data. The plot can help us identify potential patterns, but UMAP does not automatically assign customers to clusters.
+
+### Add a new customer
+
+Suppose we collect data for Customer M. We can use `umap_transform()` to place this customer into the existing embedding without fitting UMAP again.
+
+```{r}
+# New customer M (same column order as X)
+new_customer <- data.frame(
+  visits = 4,
+  avg_spend = 170,
+  online = 22,
+  discounts = 12,
+  returns = 6
+)
+
+# Scale M using the original data's center and scale
+new_scaled <- scale(
+  new_customer,
+  center = attr(X_scaled, "scaled:center"),
+  scale = attr(X_scaled, "scaled:scale")
+)
+
+# Place M in the existing UMAP space
+set.seed(42)
+new_embedding <- umap_transform(new_scaled, umap_model)
+
+new_point <- data.frame(
+  customer = "M",
+  UMAP1 = new_embedding[, 1],
+  UMAP2 = new_embedding[, 2]
+)
+
+ggplot(plot_data, aes(UMAP1, UMAP2, color = group)) +
+  geom_point(size = 10, alpha = 0.45) +
+  geom_text(aes(label = customer), color = "white",
+            fontface = "bold", size = 4) +
+  geom_point(data = new_point, aes(UMAP1, UMAP2),
+             inherit.aes = FALSE, shape = 21, size = 12,
+             fill = "gold", color = "black", stroke = 1.5) +
+  geom_text(data = new_point, aes(UMAP1, UMAP2, label = customer),
+            inherit.aes = FALSE, fontface = "bold", size = 5) +
+  scale_color_manual(values = group_colors) +
+  labs(title = "Adding a New Customer (M)",
+       color = "Shopper type") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom")
+
+```
+
+Customer M can then be added to the plot to see which existing customers they appear closest to.
+
+### Why UMAP was useful here
+
+**Seeing the structure.** Five features per customer is hard to picture, but after UMAP we can see the data in one flat plot. The three shopper types (in-store big spenders, discount shoppers, and online shoppers) each form their own cluster, even though we never told UMAP which customer belonged to which group.
+
+**Working with fewer dimensions.** Each customer is now described by 2 numbers instead of 5. With only 12 customers this doesn't save much, but a real store could have millions of customers and hundreds of features. Clustering, searching for similar customers, or plotting is much cheaper on a few coordinates than on the full feature set.
+
+**Placing new customers.** Because we saved the model, we could add customer M without redoing everything. M landed next to customers A to D, so we can reasonably label M as an in-store big spender. This is a quick way to sort a new customer into a shopper type, for example to decide what kind of offers to send them.
+
+**A note on interpretation.** UMAP keeps nearby customers close together, but the axes (UMAP1 and UMAP2) have no direct meaning, and distances between far apart clusters should not be over-interpreted. UMAP also does not label anyone by itself. We read the shopper type off of which customers M ended up near.
+
+
+
+
+
+
+
+
+
+
+
