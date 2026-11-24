@@ -14,7 +14,7 @@ UMAP stands for Uniform Manifold Approximation and Projection and has two main f
 
 #### Quick Introduction to Riemannian Manifolds
 
-The assumptions of UMAP are based on Riemannian Manifolds, but what are they? A manifold, in simple terms, is a shape that appears to be flat when zoomed in on. The shape does not need to be strictly flat overall but needs to be approximately flat within a small neighborhood. An example of this is a ball, where if you were to take a microscope and zoom in closely, the shape appears to be flat even though we know the overall shape isn't. Riemannian means that the shape comes with a built-in rule to measure the distances and angles on its surface. Combining these terms together, we get the definition that a Riemannian Manifold is a shape that appears to be flat when zoomed in on that has a built-in rule to measure the distances and angles on its surface. 
+Linear methods for dimension reduction assume that the data lies on a flat or linear subspace. On the other hand, nonlinear methods like UMAP assume that the data lies on a Riemannian manifold. A manifold is a shape that appears to be flat when zoomed in on, but not strictly flat overall. An example of this is a ball, where if you were to take a microscope and zoom in closely, the shape appears to be flat even though we know the overall shape isn't. Riemannian means that the shape comes with a built-in rule to measure the distances and angles on its surface. Combining these terms together, we get the definition that a Riemannian Manifold is a shape that appears to be flat when zoomed in on that has a built-in rule to measure the distances and angles on its surface.
 
 #### Assumptions on Data
 
@@ -28,13 +28,11 @@ UMAP first builds a weighted graph by identifying the k closest neighbors to eac
 
 - Fast and scalable
 
--  Works with unsupervised data
+- Works with unsupervised data
 
 - Works with non linear data
 
 - Feature extraction, not selection
-
-
 
 ## Example: Exploring Customer Shopping Patterns with UMAP
 
@@ -174,14 +172,3 @@ Customer M can then be added to the plot to see which existing customers they ap
 **Placing new customers.** Because we saved the model, we could add customer M without redoing everything. M landed next to customers A to D, so we can reasonably label M as an in-store big spender. This is a quick way to sort a new customer into a shopper type, for example to decide what kind of offers to send them.
 
 **A note on interpretation.** UMAP keeps nearby customers close together, but the axes (UMAP1 and UMAP2) have no direct meaning, and distances between far apart clusters should not be over-interpreted. UMAP also does not label anyone by itself. We read the shopper type off of which customers M ended up near.
-
-
-
-
-
-
-
-
-
-
-
