@@ -14,7 +14,7 @@ execute:
 library(tidyverse)
 
 # Produced by scripts/umap-model-on-claims.R
-load("data/processed/claims-results.RData")
+load("~/Desktop/PSTAT197A/vignette-umap/data/processed/claims-results.RData")
 
 pal <- c("No relevant content" = "#7570b3",
          "Relevant claim content" = "#d95f02")
