@@ -3,33 +3,39 @@ title: "UMAP"
 format: html
 ---
 
-### Introduction
+## Introduction
 
-### 
+UMAP stands for Uniform Manifold Approximation and Projection and has two main functions. The first way UMAP can be used is as a non-linear dimension reduction technique. The second way UMAP can be used is as a way to visualize high-dimensional data.
 
-### How it works
+#### Quick Introduction to Riemannian Manifolds
+
+Linear methods for dimension reduction assume that the data lies on a flat or linear subspace. On the other hand, nonlinear methods like UMAP assume that the data lies on a Riemannian manifold. A manifold is a shape that appears to be flat when zoomed in on, but not strictly flat overall. An example of this is a ball, where if you were to take a microscope and zoom in closely, the shape appears to be flat even though we know the overall shape isn't. Riemannian means that the shape comes with a built-in rule to measure the distances and angles on its surface. Combining these terms together, we get the definition that a Riemannian Manifold is a shape that appears to be flat when zoomed in on that has a built-in rule to measure the distances and angles on its surface.
+
+#### Assumptions on Data
+
+The first assumption made on the data is that it is uniformly distributed on the Riemannian Manifold. The second is that the Riemannian metric is locally constant or can be approximated as such. This basically means that if you were to zoom into the manifold and look at a small neighborhood, the points would barely change, if at all. Finally, the last assumption is that the manifold is locally connected. This means that there is no single point floating around on its own and that every point is connected to at least one of its nearest neighbors.
+
+## How it works
 
 UMAP first builds a weighted graph by identifying the k closest neighbors to each data point, like KNN. This graph captures the shape of the data. UMAP then redraws this graph in 2D, using SGD to best retain the neighboring relationship between points. This lower dimensional graph allows you to see possible groupings in the data. You can then refit UMAP with more dimensions than 2, which lets you use it as a tool for dimensionality reduction as well.
 
-### Pros and Cons
+#### Pros and Cons
 
 - Fast and scalable
 
--  Works with unsupervised data
+- Works with unsupervised data
 
 - Works with non linear data
 
 - Feature extraction, not selection
 
+## Small Example: Exploring Customer Shopping Patterns with UMAP
 
-
-## SMALL Example: Exploring Customer Shopping Patterns with UMAP
-
-### Goal
+#### Goal
 
 Imagine a store wants to see whether customers with similar shopping habits tend to behave alike. We have five features for each customer: monthly visits, average spending, online purchases, discount purchases, and returns.
 
-### Apply UMAP
+#### Apply UMAP
 
 ```{r, results = "hide"}
 library(tidyverse)
@@ -77,7 +83,7 @@ umap_model <- umap(
 
 UMAP takes the five original features and converts each customer into two new coordinates, UMAP1 and UMAP2. This lets us visualize similarities between customers in a two-dimensional plot.
 
-### Visualize the results
+#### Visualize the results
 
 ```{r}
 embedding <- as.data.frame(umap_model$embedding)
@@ -102,7 +108,7 @@ ggplot(plot_data, aes(UMAP1, UMAP2, color = group)) +
 
 Customers appearing near one another have more similar shopping patterns in the original data. The plot can help us identify potential patterns, but UMAP does not automatically assign customers to clusters.
 
-### Add a new customer
+#### Add a new customer
 
 Suppose we collect data for Customer M. We can use `umap_transform()` to place this customer into the existing embedding without fitting UMAP again.
 
@@ -152,7 +158,7 @@ ggplot(plot_data, aes(UMAP1, UMAP2, color = group)) +
 
 Customer M can then be added to the plot to see which existing customers they appear closest to.
 
-### Why UMAP was useful here
+#### Why UMAP was useful here
 
 **Seeing the structure.** Five features per customer is hard to picture, but after UMAP we can see the data in one flat plot. The three shopper types (in-store big spenders, discount shoppers, and online shoppers) each form their own cluster, even though we never told UMAP which customer belonged to which group.
 
@@ -161,14 +167,3 @@ Customer M can then be added to the plot to see which existing customers they ap
 **Placing new customers.** Because we saved the model, we could add customer M without redoing everything. M landed next to customers A to D, so we can reasonably label M as an in-store big spender. This is a quick way to sort a new customer into a shopper type, for example to decide what kind of offers to send them.
 
 **A note on interpretation.** UMAP keeps nearby customers close together, but the axes (UMAP1 and UMAP2) have no direct meaning, and distances between far apart clusters should not be over-interpreted. UMAP also does not label anyone by itself. We read the shopper type off of which customers M ended up near.
-
-
-
-
-
-
-
-
-
-
-
