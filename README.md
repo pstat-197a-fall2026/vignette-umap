@@ -27,7 +27,6 @@ vignette-umap/
 ├── README.md                          # Project introduction
 ├── vignette.qmd                       # Final Quarto source for the vignette
 ├── vignette.html                      # Final rendered version of the vignette
-├── styles.css                         # Custom styling for the rendered vignette
 │
 ├── scripts/                           # Scripts used for drafting the vignette
 │   ├── preprocessing.R                # Module 2 functions: HTML parsing, cleaning, TF-IDF
