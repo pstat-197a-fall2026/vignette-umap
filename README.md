@@ -29,12 +29,11 @@ vignette-umap/
 ├── vignette.html                      # Final rendered version of the vignette
 │
 ├── scripts/                           # Scripts used for drafting the vignette
-│   ├── preprocessing.R                # Module 2 functions: HTML parsing, cleaning, TF-IDF
 │   ├── claims-preprocessing.R         # Runs UMAP on the claims TF-IDF data (2D for plotting,
 │   │                                  #   10D as extracted features), evaluates with kNN on
 │   │                                  #   held-out pages, saves results to claims-results.RData
-│   └── applyingtoclaimsdata.qmd       # Part 4: applies UMAP to the claims text data in five
-│                                      #   steps (dataset, prepare, UMAP, visualize, evaluate)
+│   └── applyingtoclaimsdata.qmd       # Applies UMAP to the claims text data in five steps (dataset, prepare, UMAP, visualize, evaluate)
+│                                     
 │
 ├── data/
 │   ├── raw/                           # Original unmodified data
