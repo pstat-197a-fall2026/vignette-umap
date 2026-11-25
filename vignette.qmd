@@ -1,5 +1,7 @@
 ---
-title: "UMAP"
+title: "PSTAT 197A Vignette: Uniform Manifold Approximation and Projection (UMAP)"
+author: 'Lawrence Huynh, Henry Ding, Adrian Filip, Tyler Hoong'
+date: today
 format: html
 ---
 
@@ -15,19 +17,19 @@ Linear methods for dimension reduction assume that the data lies on a flat or li
 
 The first assumption made on the data is that it is uniformly distributed on the Riemannian Manifold. The second is that the Riemannian metric is locally constant or can be approximated as such. This basically means that if you were to zoom into the manifold and look at a small neighborhood, the points would barely change, if at all. Finally, the last assumption is that the manifold is locally connected. This means that there is no single point floating around on its own and that every point is connected to at least one of its nearest neighbors.
 
-## How it works
+## How UMAP Works
 
 UMAP first builds a weighted graph by identifying the k closest neighbors to each data point, like KNN. This graph captures the shape of the data. UMAP then redraws this graph in 2D, using SGD to best retain the neighboring relationship between points. This lower dimensional graph allows you to see possible groupings in the data. You can then refit UMAP with more dimensions than 2, which lets you use it as a tool for dimensionality reduction as well.
 
 #### Pros and Cons
 
-- Fast and scalable
+-   Fast and scalable
 
-- Works with unsupervised data
+-   Works with unsupervised data
 
-- Works with non linear data
+-   Works with non linear data
 
-- Feature extraction, not selection
+-   Feature extraction, not selection
 
 ## Small Example: Exploring Customer Shopping Patterns with UMAP
 
@@ -167,3 +169,74 @@ Customer M can then be added to the plot to see which existing customers they ap
 **Placing new customers.** Because we saved the model, we could add customer M without redoing everything. M landed next to customers A to D, so we can reasonably label M as an in-store big spender. This is a quick way to sort a new customer into a shopper type, for example to decide what kind of offers to send them.
 
 **A note on interpretation.** UMAP keeps nearby customers close together, but the axes (UMAP1 and UMAP2) have no direct meaning, and distances between far apart clusters should not be over-interpreted. UMAP also does not label anyone by itself. We read the shopper type off of which customers M ended up near.
+
+## Applying UMAP to Text Data: Claims Classification
+
+The small example had five features. Real data can have thousands. In this section we use UMAP on the Module 2 claims text data, where each web page is described by **5,367 features**, and ask the question that matters most for dimensionality reduction: **can UMAP extract a small set of features that still tells the classes apart?**
+
+#### The data
+
+The data are 1,971 scraped web pages, labeled as containing **relevant claim content** (1,075) or **no relevant content** (896). We reuse the Module 2 preprocessing to turn each page into TF-IDF weights, giving a matrix of **5,367 word features that is 98.3% zeros**. We hold out 20% of the pages (395) for testing and use the other 1,576 for training.
+
+#### Apply UMAP
+
+We run UMAP twice, using cosine distance because it compares which words a page uses rather than how long the page is. The full code is in `scripts/part4-preprocessing.R`.
+
+```{r}
+#| eval: false
+# 2D embedding of every page, for plotting
+umap_2d <- umap(tfidf_matrix, n_neighbors = 15, n_components = 2,
+                min_dist = 0.1, metric = "cosine")
+
+# 10D embedding fit on training pages only: these are the extracted features
+umap_model <- umap(tfidf_matrix[train_idx, ], n_neighbors = 15,
+                   n_components = 10, min_dist = 0.1,
+                   metric = "cosine", ret_model = TRUE)
+
+# Place the held-out pages into the same 10D space
+test_embedding <- umap_transform(tfidf_matrix[test_idx, ], umap_model)
+```
+
+The 2D version is for looking at the data. The **10D version is the feature extraction**: it is fit on training pages only, and `umap_transform()` places new pages in the same space, just like Customer M in the small example. Every page is now described by **10 numbers instead of 5,367**.
+
+#### Visualize the results
+
+```{r}
+#| echo: false
+#| fig-cap: "UMAP of the claims pages (2D), colored by class."
+knitr::include_graphics("img/claims-umap-2d.png")
+```
+
+UMAP never saw the labels and finds some structure, but **the two classes overlap heavily in 2D**. A picture alone does not separate these pages. As before, the axes have no direct meaning, and distances between far-apart groups should not be over-interpreted.
+
+#### Did the extracted features keep the signal?
+
+This is the real test. We predict each held-out page's class from its 15 nearest training pages (k-nearest neighbors) using three different sets of features.
+
+```{r}
+#| echo: false
+#| fig-cap: "Held-out accuracy of k-nearest neighbors with three feature sets."
+knitr::include_graphics("img/claims-knn-accuracy.png")
+```
+
+| Features                        | Number of features | Held-out accuracy |
+|:--------------------------------|-------------------:|------------------:|
+| Always guess the majority class |                  0 |             54.4% |
+| All TF-IDF words                |              5,367 |             81.0% |
+| **UMAP features**               |             **10** |         **77.5%** |
+
+::: callout-note
+## Key takeaway
+
+**Ten UMAP features recover most of the accuracy of all 5,367 TF-IDF features** (77.5% against 81.0%), and they are far above the 54.4% baseline. UMAP did not classify anything on its own. It produced a much smaller representation of each page that still carries most of the class signal, at a cost of about 3.5 points of accuracy.
+:::
+
+#### Why UMAP was useful here
+
+**Feature extraction, not selection.** The 10 UMAP features are new coordinates built from all 5,367 words, not a subset of the original words. This is the "feature extraction, not selection" point from the pros and cons list.
+
+**Far fewer dimensions.** Searching for similar pages or training a model is much cheaper on 10 numbers per page than on 5,367, and the cost is a small drop in accuracy.
+
+**New pages can be placed without refitting.** Because the model was saved, held-out pages were placed in the existing space with `umap_transform()`, as in the small example.
+
+**A note on interpretation.** The 10 features are not individually meaningful, and UMAP can be sensitive to settings such as `n_neighbors` and `min_dist`. The 3.5-point gap to the full TF-IDF features is also worth noting: the extracted features are a compressed summary, not a lossless one.

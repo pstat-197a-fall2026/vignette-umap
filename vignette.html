@@ -2,23 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Lawrence Huynh, Henry Ding, Adrian Filip, Tyler Hoong">
+<meta name="dcterms.date" content="2026-11-25">
 
-<title>UMAP</title>
+<title>PSTAT 197A Vignette: Uniform Manifold Approximation and Projection (UMAP)</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
+code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: 1.5em;}
-div.column{flex: auto;}
-@media screen {
-div.columns{gap: min(4vw, 1.5em);}
-div.column{overflow-x: auto;}
-}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -67,14 +63,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="vignette_files/libs/clipboard/clipboard.min.js"></script>
 <script src="vignette_files/libs/quarto-html/quarto.js" type="module"></script>
 <script src="vignette_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="vignette_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="vignette_files/libs/quarto-html/popper.min.js"></script>
 <script src="vignette_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="vignette_files/libs/quarto-html/anchor.min.js"></script>
 <link href="vignette_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="vignette_files/libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="vignette_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="vignette_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="vignette_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="vignette_files/libs/bootstrap/bootstrap-215b371544c282197b31c8aa00ce3677.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="vignette_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -87,14 +84,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">UMAP</h1>
+<h1 class="title">PSTAT 197A Vignette: Uniform Manifold Approximation and Projection (UMAP)</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Lawrence Huynh, Henry Ding, Adrian Filip, Tyler Hoong </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 25, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -116,8 +125,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The first assumption made on the data is that it is uniformly distributed on the Riemannian Manifold. The second is that the Riemannian metric is locally constant or can be approximated as such. This basically means that if you were to zoom into the manifold and look at a small neighborhood, the points would barely change, if at all. Finally, the last assumption is that the manifold is locally connected. This means that there is no single point floating around on its own and that every point is connected to at least one of its nearest neighbors.</p>
 </section>
 </section>
-<section id="how-it-works" class="level2">
-<h2 class="anchored" data-anchor-id="how-it-works">How it works</h2>
+<section id="how-umap-works" class="level2">
+<h2 class="anchored" data-anchor-id="how-umap-works">How UMAP Works</h2>
 <p>UMAP first builds a weighted graph by identifying the k closest neighbors to each data point, like KNN. This graph captures the shape of the data. UMAP then redraws this graph in 2D, using SGD to best retain the neighboring relationship between points. This lower dimensional graph allows you to see possible groupings in the data. You can then refit UMAP with more dimensions than 2, which lets you use it as a tool for dimensionality reduction as well.</p>
 <section id="pros-and-cons" class="level4">
 <h4 class="anchored" data-anchor-id="pros-and-cons">Pros and Cons</h4>
@@ -141,10 +150,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ dplyr     1.2.1     ✔ readr     2.1.5
 ✔ forcats   1.0.1     ✔ stringr   1.6.0
-✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ ggplot2   4.0.4     ✔ tibble    3.3.0
+✔ lubridate 1.9.4     ✔ tidyr     1.3.2
 ✔ purrr     1.2.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
@@ -292,6 +301,111 @@ The following objects are masked from 'package:tidyr':
 <p><strong>Working with fewer dimensions.</strong> Each customer is now described by 2 numbers instead of 5. With only 12 customers this doesn’t save much, but a real store could have millions of customers and hundreds of features. Clustering, searching for similar customers, or plotting is much cheaper on a few coordinates than on the full feature set.</p>
 <p><strong>Placing new customers.</strong> Because we saved the model, we could add customer M without redoing everything. M landed next to customers A to D, so we can reasonably label M as an in-store big spender. This is a quick way to sort a new customer into a shopper type, for example to decide what kind of offers to send them.</p>
 <p><strong>A note on interpretation.</strong> UMAP keeps nearby customers close together, but the axes (UMAP1 and UMAP2) have no direct meaning, and distances between far apart clusters should not be over-interpreted. UMAP also does not label anyone by itself. We read the shopper type off of which customers M ended up near.</p>
+</section>
+</section>
+<section id="applying-umap-to-text-data-claims-classification" class="level2">
+<h2 class="anchored" data-anchor-id="applying-umap-to-text-data-claims-classification">Applying UMAP to Text Data: Claims Classification</h2>
+<p>The small example had five features. Real data can have thousands. In this section we use UMAP on the Module 2 claims text data, where each web page is described by <strong>5,367 features</strong>, and ask the question that matters most for dimensionality reduction: <strong>can UMAP extract a small set of features that still tells the classes apart?</strong></p>
+<section id="the-data" class="level4">
+<h4 class="anchored" data-anchor-id="the-data">The data</h4>
+<p>The data are 1,971 scraped web pages, labeled as containing <strong>relevant claim content</strong> (1,075) or <strong>no relevant content</strong> (896). We reuse the Module 2 preprocessing to turn each page into TF-IDF weights, giving a matrix of <strong>5,367 word features that is 98.3% zeros</strong>. We hold out 20% of the pages (395) for testing and use the other 1,576 for training.</p>
+</section>
+<section id="apply-umap-1" class="level4">
+<h4 class="anchored" data-anchor-id="apply-umap-1">Apply UMAP</h4>
+<p>We run UMAP twice, using cosine distance because it compares which words a page uses rather than how long the page is. The full code is in <code>scripts/part4-preprocessing.R</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2D embedding of every page, for plotting</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>umap_2d <span class="ot">&lt;-</span> <span class="fu">umap</span>(tfidf_matrix, <span class="at">n_neighbors =</span> <span class="dv">15</span>, <span class="at">n_components =</span> <span class="dv">2</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">min_dist =</span> <span class="fl">0.1</span>, <span class="at">metric =</span> <span class="st">"cosine"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 10D embedding fit on training pages only: these are the extracted features</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>umap_model <span class="ot">&lt;-</span> <span class="fu">umap</span>(tfidf_matrix[train_idx, ], <span class="at">n_neighbors =</span> <span class="dv">15</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">n_components =</span> <span class="dv">10</span>, <span class="at">min_dist =</span> <span class="fl">0.1</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">metric =</span> <span class="st">"cosine"</span>, <span class="at">ret_model =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Place the held-out pages into the same 10D space</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>test_embedding <span class="ot">&lt;-</span> <span class="fu">umap_transform</span>(tfidf_matrix[test_idx, ], umap_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The 2D version is for looking at the data. The <strong>10D version is the feature extraction</strong>: it is fit on training pages only, and <code>umap_transform()</code> places new pages in the same space, just like Customer M in the small example. Every page is now described by <strong>10 numbers instead of 5,367</strong>.</p>
+</section>
+<section id="visualize-the-results-1" class="level4">
+<h4 class="anchored" data-anchor-id="visualize-the-results-1">Visualize the results</h4>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/claims-umap-2d.png" class="img-fluid figure-img" width="700"></p>
+<figcaption>UMAP of the claims pages (2D), colored by class.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>UMAP never saw the labels and finds some structure, but <strong>the two classes overlap heavily in 2D</strong>. A picture alone does not separate these pages. As before, the axes have no direct meaning, and distances between far-apart groups should not be over-interpreted.</p>
+</section>
+<section id="did-the-extracted-features-keep-the-signal" class="level4">
+<h4 class="anchored" data-anchor-id="did-the-extracted-features-keep-the-signal">Did the extracted features keep the signal?</h4>
+<p>This is the real test. We predict each held-out page’s class from its 15 nearest training pages (k-nearest neighbors) using three different sets of features.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/claims-knn-accuracy.png" class="img-fluid figure-img" width="700"></p>
+<figcaption>Held-out accuracy of k-nearest neighbors with three feature sets.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 45%">
+<col style="width: 27%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Features</th>
+<th style="text-align: right;">Number of features</th>
+<th style="text-align: right;">Held-out accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Always guess the majority class</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">54.4%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All TF-IDF words</td>
+<td style="text-align: right;">5,367</td>
+<td style="text-align: right;">81.0%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>UMAP features</strong></td>
+<td style="text-align: right;"><strong>10</strong></td>
+<td style="text-align: right;"><strong>77.5%</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key takeaway
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Ten UMAP features recover most of the accuracy of all 5,367 TF-IDF features</strong> (77.5% against 81.0%), and they are far above the 54.4% baseline. UMAP did not classify anything on its own. It produced a much smaller representation of each page that still carries most of the class signal, at a cost of about 3.5 points of accuracy.</p>
+</div>
+</div>
+</section>
+<section id="why-umap-was-useful-here-1" class="level4">
+<h4 class="anchored" data-anchor-id="why-umap-was-useful-here-1">Why UMAP was useful here</h4>
+<p><strong>Feature extraction, not selection.</strong> The 10 UMAP features are new coordinates built from all 5,367 words, not a subset of the original words. This is the “feature extraction, not selection” point from the pros and cons list.</p>
+<p><strong>Far fewer dimensions.</strong> Searching for similar pages or training a model is much cheaper on 10 numbers per page than on 5,367, and the cost is a small drop in accuracy.</p>
+<p><strong>New pages can be placed without refitting.</strong> Because the model was saved, held-out pages were placed in the existing space with <code>umap_transform()</code>, as in the small example.</p>
+<p><strong>A note on interpretation.</strong> The 10 features are not individually meaningful, and UMAP can be sensitive to settings such as <code>n_neighbors</code> and <code>min_dist</code>. The 3.5-point gap to the full TF-IDF features is also worth noting: the extracted features are a compressed summary, not a lossless one.</p>
 </section>
 </section>
 
