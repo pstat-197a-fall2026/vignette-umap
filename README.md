@@ -2,7 +2,7 @@
 
 Vignette on implementing Uniform Manifold Approximation and Projection (UMAP) for visualization and non-linear dimensionality reduction on high dimensional data; created as a class project for PSTAT 197A in Fall 2026.
 
-### Contributors
+## Contributors
 
 - Lawrence Huynh
 
@@ -12,7 +12,7 @@ Vignette on implementing Uniform Manifold Approximation and Projection (UMAP) fo
 
 - Tyler Hoong
 
-### Abstract
+## Abstract
 
 UMAP is a tool for both visualization of high dimensional data and for non-linear feature extraction. This vignette demonstrates both use cases using the `uwot` library in R. We explore how UMAP works, the assumptions it makes on the data, and its pros and cons. We then go through two worked examples to demonstrate the use cases:
 
@@ -20,7 +20,7 @@ UMAP is a tool for both visualization of high dimensional data and for non-linea
 
 - Feature extraction on vectorized webpage text data as a preprocessing step before classification
 
-### Repository Contents
+## Repository Contents
 
 - `vignette.qmd`: Final quarto source for the vignette
 
@@ -50,7 +50,7 @@ UMAP is a tool for both visualization of high dimensional data and for non-linea
  
   - `claims-umap-2d.png`: A 2D UMAP of the claims pages' TF-IDF features, colored by class, showing some structure but heavy overlap between relevant and non-relevant pages 
 
-### References
+## References
  
 Coenen, A., & Pearce, A. (n.d.). *Understanding UMAP*. Google PAIR. Retrieved November 25, 2026, from <https://pair-code.github.io/understanding-umap/>
  
