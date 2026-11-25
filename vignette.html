@@ -104,18 +104,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="introduction" class="level3">
-<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>UMAP stands for Uniform Manifold Approximation and Projection and has two main functions. The first way UMAP can be used is as a non-linear dimension reduction technique. The second way UMAP can be used is as a way to visualize high-dimensional data.</p>
+<section id="quick-introduction-to-riemannian-manifolds" class="level4">
+<h4 class="anchored" data-anchor-id="quick-introduction-to-riemannian-manifolds">Quick Introduction to Riemannian Manifolds</h4>
+<p>Linear methods for dimension reduction assume that the data lies on a flat or linear subspace. On the other hand, nonlinear methods like UMAP assume that the data lies on a Riemannian manifold. A manifold is a shape that appears to be flat when zoomed in on, but not strictly flat overall. An example of this is a ball, where if you were to take a microscope and zoom in closely, the shape appears to be flat even though we know the overall shape isn’t. Riemannian means that the shape comes with a built-in rule to measure the distances and angles on its surface. Combining these terms together, we get the definition that a Riemannian Manifold is a shape that appears to be flat when zoomed in on that has a built-in rule to measure the distances and angles on its surface.</p>
 </section>
-<section id="section" class="level3">
-<h3 class="anchored" data-anchor-id="section"></h3>
+<section id="assumptions-on-data" class="level4">
+<h4 class="anchored" data-anchor-id="assumptions-on-data">Assumptions on Data</h4>
+<p>The first assumption made on the data is that it is uniformly distributed on the Riemannian Manifold. The second is that the Riemannian metric is locally constant or can be approximated as such. This basically means that if you were to zoom into the manifold and look at a small neighborhood, the points would barely change, if at all. Finally, the last assumption is that the manifold is locally connected. This means that there is no single point floating around on its own and that every point is connected to at least one of its nearest neighbors.</p>
 </section>
-<section id="how-it-works" class="level3">
-<h3 class="anchored" data-anchor-id="how-it-works">How it works</h3>
+</section>
+<section id="how-it-works" class="level2">
+<h2 class="anchored" data-anchor-id="how-it-works">How it works</h2>
 <p>UMAP first builds a weighted graph by identifying the k closest neighbors to each data point, like KNN. This graph captures the shape of the data. UMAP then redraws this graph in 2D, using SGD to best retain the neighboring relationship between points. This lower dimensional graph allows you to see possible groupings in the data. You can then refit UMAP with more dimensions than 2, which lets you use it as a tool for dimensionality reduction as well.</p>
-</section>
-<section id="pros-and-cons" class="level3">
-<h3 class="anchored" data-anchor-id="pros-and-cons">Pros and Cons</h3>
+<section id="pros-and-cons" class="level4">
+<h4 class="anchored" data-anchor-id="pros-and-cons">Pros and Cons</h4>
 <ul>
 <li><p>Fast and scalable</p></li>
 <li><p>Works with unsupervised data</p></li>
@@ -123,14 +128,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Feature extraction, not selection</p></li>
 </ul>
 </section>
+</section>
 <section id="small-example-exploring-customer-shopping-patterns-with-umap" class="level2">
-<h2 class="anchored" data-anchor-id="small-example-exploring-customer-shopping-patterns-with-umap">SMALL Example: Exploring Customer Shopping Patterns with UMAP</h2>
-<section id="goal" class="level3">
-<h3 class="anchored" data-anchor-id="goal">Goal</h3>
+<h2 class="anchored" data-anchor-id="small-example-exploring-customer-shopping-patterns-with-umap">Small Example: Exploring Customer Shopping Patterns with UMAP</h2>
+<section id="goal" class="level4">
+<h4 class="anchored" data-anchor-id="goal">Goal</h4>
 <p>Imagine a store wants to see whether customers with similar shopping habits tend to behave alike. We have five features for each customer: monthly visits, average spending, online purchases, discount purchases, and returns.</p>
 </section>
-<section id="apply-umap" class="level3">
-<h3 class="anchored" data-anchor-id="apply-umap">Apply UMAP</h3>
+<section id="apply-umap" class="level4">
+<h4 class="anchored" data-anchor-id="apply-umap">Apply UMAP</h4>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
@@ -195,8 +201,8 @@ The following objects are masked from 'package:tidyr':
 </div>
 <p>UMAP takes the five original features and converts each customer into two new coordinates, UMAP1 and UMAP2. This lets us visualize similarities between customers in a two-dimensional plot.</p>
 </section>
-<section id="visualize-the-results" class="level3">
-<h3 class="anchored" data-anchor-id="visualize-the-results">Visualize the results</h3>
+<section id="visualize-the-results" class="level4">
+<h4 class="anchored" data-anchor-id="visualize-the-results">Visualize the results</h4>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>embedding <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(umap_model<span class="sc">$</span>embedding)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -226,8 +232,8 @@ The following objects are masked from 'package:tidyr':
 </div>
 <p>Customers appearing near one another have more similar shopping patterns in the original data. The plot can help us identify potential patterns, but UMAP does not automatically assign customers to clusters.</p>
 </section>
-<section id="add-a-new-customer" class="level3">
-<h3 class="anchored" data-anchor-id="add-a-new-customer">Add a new customer</h3>
+<section id="add-a-new-customer" class="level4">
+<h4 class="anchored" data-anchor-id="add-a-new-customer">Add a new customer</h4>
 <p>Suppose we collect data for Customer M. We can use <code>umap_transform()</code> to place this customer into the existing embedding without fitting UMAP again.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># New customer M (same column order as X)</span></span>
@@ -280,8 +286,8 @@ The following objects are masked from 'package:tidyr':
 </div>
 <p>Customer M can then be added to the plot to see which existing customers they appear closest to.</p>
 </section>
-<section id="why-umap-was-useful-here" class="level3">
-<h3 class="anchored" data-anchor-id="why-umap-was-useful-here">Why UMAP was useful here</h3>
+<section id="why-umap-was-useful-here" class="level4">
+<h4 class="anchored" data-anchor-id="why-umap-was-useful-here">Why UMAP was useful here</h4>
 <p><strong>Seeing the structure.</strong> Five features per customer is hard to picture, but after UMAP we can see the data in one flat plot. The three shopper types (in-store big spenders, discount shoppers, and online shoppers) each form their own cluster, even though we never told UMAP which customer belonged to which group.</p>
 <p><strong>Working with fewer dimensions.</strong> Each customer is now described by 2 numbers instead of 5. With only 12 customers this doesn’t save much, but a real store could have millions of customers and hundreds of features. Clustering, searching for similar customers, or plotting is much cheaper on a few coordinates than on the full feature set.</p>
 <p><strong>Placing new customers.</strong> Because we saved the model, we could add customer M without redoing everything. M landed next to customers A to D, so we can reasonably label M as an in-store big spender. This is a quick way to sort a new customer into a shopper type, for example to decide what kind of offers to send them.</p>
