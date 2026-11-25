@@ -74,7 +74,8 @@ The 2D version is for seeing the data. The 10D version, fit on training pages on
 ```{r}
 #| fig-width: 7
 #| fig-height: 5.5
-ggplot(umap_df, aes(UMAP1, UMAP2, color = class)) +
+p_umap <- 
+  ggplot(umap_df, aes(UMAP1, UMAP2, color = class)) +
   geom_point(alpha = 0.55, size = 1.4) +
   scale_color_manual(values = pal) +
   labs(title = "UMAP of Claims Text Data (TF-IDF, cosine distance)",
@@ -93,7 +94,8 @@ A pretty picture is not enough. The real test is whether the 10 extracted featur
 ```{r}
 #| fig-width: 7
 #| fig-height: 4
-eval_table |>
+p_acc <-
+  eval_table |>
   mutate(features = fct_reorder(features, accuracy)) |>
   ggplot(aes(accuracy, features)) +
   geom_col(fill = "#1b9e77", width = 0.6) +
