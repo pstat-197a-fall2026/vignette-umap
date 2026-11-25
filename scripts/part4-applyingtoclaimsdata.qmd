@@ -2,10 +2,9 @@
 title: "Part 4: Applying UMAP to the Claims Text Data"
 format:
   pdf:
-    embed-resources: true
-    code-fold: true
     toc: true
 execute:
+  echo: false
   warning: false
   message: false
 ---
@@ -38,11 +37,11 @@ We reuse the Module 2 preprocessing: parse the HTML, clean the text, drop stop w
 ```{r}
 data_summary |>
   transmute(
-    Documents = n_docs,
-    `TF-IDF features (words)` = n_features,
-    `Training docs` = n_train,
-    `Test docs` = n_test,
-    `Share of entries equal to 0` = pct(pct_zero)
+    Docs = n_docs,
+    Features = n_features,
+    Train = n_train,
+    Test = n_test,
+    `% zeros` = pct(pct_zero)
   ) |>
   knitr::kable(format.args = list(big.mark = ","))
 ```
@@ -75,7 +74,8 @@ The 2D version is for seeing the data. The 10D version, fit on training pages on
 ```{r}
 #| fig-width: 7
 #| fig-height: 5.5
-ggplot(umap_df, aes(UMAP1, UMAP2, color = class)) +
+p_umap <- 
+  ggplot(umap_df, aes(UMAP1, UMAP2, color = class)) +
   geom_point(alpha = 0.55, size = 1.4) +
   scale_color_manual(values = pal) +
   labs(title = "UMAP of Claims Text Data (TF-IDF, cosine distance)",
@@ -85,7 +85,7 @@ ggplot(umap_df, aes(UMAP1, UMAP2, color = class)) +
   theme(legend.position = "bottom")
 ```
 
-UMAP never saw the labels, yet pages of the same class tend to land near each other. Overlap tells us the two classes share vocabulary. As in the small example, the axes have no meaning on their own and distances between far-apart groups should not be over-interpreted.
+UMAP never saw the labels. It finds some structure, but the two classes overlap heavily in 2D, so a picture alone won't classify these pages. The axes have no meaning on their own, and distances between far-apart groups shouldn't be over-interpreted.
 
 ## Step 5: Evaluate the results
 
@@ -94,7 +94,8 @@ A pretty picture is not enough. The real test is whether the 10 extracted featur
 ```{r}
 #| fig-width: 7
 #| fig-height: 4
-eval_table |>
+p_acc <-
+  eval_table |>
   mutate(features = fct_reorder(features, accuracy)) |>
   ggplot(aes(accuracy, features)) +
   geom_col(fill = "#1b9e77", width = 0.6) +
@@ -126,8 +127,6 @@ The numbers below fill in from `claims-results.RData` when the file is rendered.
 
 **Step 3, apply UMAP (about 20 sec).** "We run UMAP with cosine distance. One run goes down to 2 dimensions for plotting. A second run, fit on training pages only, goes down to `{r} n_feat` dimensions, and we use `umap_transform` to place the test pages in that same space. That second run is feature extraction."
 
-**Step 4, visualize (about 25 sec).** "Here are all the pages in two dimensions, colored by class. UMAP never saw the labels, but the classes largely separate. The overlap shows the classes share some vocabulary, and the axes themselves don't mean anything."
+**Step 4, visualize (about 25 sec).** "Here are all the pages in two dimensions, colored by class. UMAP never saw the labels. It finds some structure, but the classes overlap a lot, so the picture alone isn't enough. That's why we test it on a classification task."
 
-**Step 5, evaluate (about 30 sec).** "To check this isn't just a nice picture, we classify held-out pages with nearest neighbors. Guessing the majority class gets `{r} pct(acc[['Majority class']])`. Using all `{r} scales::comma(data_summary$n_features)` TF-IDF features gets `{r} pct(acc[['Full TF-IDF']])`. Using only `{r} n_feat` UMAP features gets `{r} pct(acc[['UMAP (10 dims)']])`. So `{r} n_feat` extracted numbers per page carry the information we need, which is what makes UMAP useful beyond visualization."
-
-*Edit the Step 5 wording after rendering if the UMAP result is not what you expected, so the sentence matches the actual numbers.*
+**Step 5, evaluate (about 30 sec).** "To check this isn't just a nice picture, we classify held-out pages with nearest neighbors. Guessing the majority class gets `{r} pct(acc[['Majority class']])`. Using all `{r} scales::comma(data_summary$n_features)` TF-IDF features gets `{r} pct(acc[['Full TF-IDF']])`. Using only `{r} n_feat` UMAP features gets `{r} pct(acc[['UMAP (10 dims)']])`. So `{r} n_feat` extracted numbers per page recover most of the accuracy of all `{r} scales::comma(data_summary$n_features)` features, while being far smaller. That's what UMAP is useful for beyond a picture."
