@@ -23,7 +23,7 @@ UMAP first builds a weighted graph by identifying the k closest neighbors to eac
 
 
 
-## SMALL Example: Exploring Customer Shopping Patterns with UMAP
+## Example: Exploring Customer Shopping Patterns with UMAP
 
 ### Goal
 
