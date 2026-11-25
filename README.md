@@ -51,9 +51,9 @@ UMAP is a tool for both visualization of high dimensional data and for non-linea
   - `claims-umap-2d.png`: A 2D UMAP of the claims pages' TF-IDF features, colored by class, showing some structure but heavy overlap between relevant and non-relevant pages 
 
 ### References
-
-<https://umap-learn.readthedocs.io/en/latest/index.html>
-
-<https://cran.r-project.org/web/packages/umap/vignettes/umap.html>
-
-<https://pair-code.github.io/understanding-umap/>
+ 
+Coenen, A., & Pearce, A. (n.d.). *Understanding UMAP*. Google PAIR. Retrieved November 25, 2026, from <https://pair-code.github.io/understanding-umap/>
+ 
+Konopka, T. (2023). *Uniform manifold approximation and projection in R* [Package vignette]. In *umap: Uniform manifold approximation and projection* (R package version 0.2.10.0). The Comprehensive R Archive Network. <https://cran.r-project.org/web/packages/umap/vignettes/umap.html>
+ 
+McInnes, L. (2018). *UMAP: Uniform manifold approximation and projection for dimension reduction* (Version 0.6.0) [Software documentation]. Retrieved November 25, 2026, from <https://umap-learn.readthedocs.io/en/latest/index.html>
