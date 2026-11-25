@@ -1,6 +1,6 @@
 # vignette-umap
 
-Vignette on implementing Uniform Manifold Approximation and Projection (UMAP) for visualization and non-linear dimensionality reduction on high dimensional data; created as a class project for PSTAT197A in Fall 2026*.*
+Vignette on implementing Uniform Manifold Approximation and Projection (UMAP) for visualization and non-linear dimensionality reduction on high dimensional data; created as a class project for PSTAT197A in Fall 2026.
 
 ### Contributors
 
@@ -22,13 +22,15 @@ UMAP is a tool for both visualization of high dimensional data and for non-linea
 
 ### Repository Contents
 
-- `vignette.qmd`: Quarto source for the vignette
+- `vignette.qmd`: Final quarto source for the vignette
 
-- `vignette.html`: Rendered version of the vignette
+- `vignette.html`: Final rendered version of the vignette
 
-- `scripts/`: Scripts used for making the vignette
+- `scripts/`: Scripts used for drafting the vignette
 
-  - `part4-preprocessing`: Runs UMAP on the Module 2 claims TF-IDF data (2D for plotting, 10D as extracted features), evaluates with kNN on held-out pages, and saves the results to `claims-results.RData`
+  - `part4-preprocessing.R`: Runs UMAP on the Module 2 claims TF-IDF data (2D for plotting, 10D as extracted features), evaluates with kNN on held-out pages, and saves the results to `claims-results.RData`
+ 
+  - `part4-applyingtoclaimsdata.qmd`: Applies UMAP to the Module 2 claims text data in five steps (dataset, prepare, UMAP, visualize, evaluate), where 10 UMAP features reach 77.5% kNN accuracy on held-out pages versus 81.0% for all 5,367 TF-IDF features.
 
 - `data`: Data used in the vignette
 
