@@ -22,6 +22,33 @@ UMAP is a tool for both visualization of high dimensional data and for non-linea
 
 ## Repository Contents
 
+vignette-umap/
+├── README.md                          # Project introduction
+├── vignette.qmd                       # Final Quarto source for the vignette
+├── vignette.html                      # Final rendered version of the vignette
+├── styles.css                         # Custom styling for the rendered vignette
+│
+├── scripts/                           # Scripts used for drafting the vignette
+│   ├── preprocessing.R                # Module 2 functions: HTML parsing, cleaning, TF-IDF
+│   ├── claims-preprocessing.R         # Runs UMAP on the claims TF-IDF data (2D for plotting,
+│   │                                  #   10D as extracted features), evaluates with kNN on
+│   │                                  #   held-out pages, saves results to claims-results.RData
+│   └── applyingtoclaimsdata.qmd       # Part 4: applies UMAP to the claims text data in five
+│                                      #   steps (dataset, prepare, UMAP, visualize, evaluate)
+│
+├── data/
+│   ├── raw/                           # Original unmodified data
+│   │   ├── claims-raw.RData           # Raw HTML and labels for 2,165 webpages
+│   │   └── claims-test.RData          # Raw HTML for 929 unlabeled webpages
+│   └── processed/
+│       └── claims-results.RData       # Class counts, data summary, 2D embedding, kNN accuracy
+│                                      #   table, confusion matrix, timings, n_feat and k
+│
+└── img/                               # Images for the vignette
+    ├── claims-umap-2d.png             # 2D UMAP of claims pages, colored by class
+    └── claims-knn-accuracy.png        # Held-out kNN accuracy: 77.5% (10 UMAP features)
+                                       #   vs 81.0% (5,367 TF-IDF features) vs 54.4% (baseline)
+
 - `vignette.qmd`: Final quarto source for the vignette
 
 - `vignette.html`: Final rendered version of the vignette
