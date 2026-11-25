@@ -33,8 +33,14 @@ UMAP is a tool for both visualization of high dimensional data and for non-linea
 - `data`: Data used in the vignette
 
   - `processed/`: processed claims results data
+ 
+    - `claims-results.Rdata`: Contains class counts, the data summary, the 2D UMAP embedding, the kNN accuracy table, the confusion matrix, timings, and the settings `n_feat` and `k`
 
   - `raw/`: Original unmodified data
+ 
+    - `claims-raw.RData`: contains raw HTML and class labels for 2,165 webpages
+
+    - `claims-test.RData`: contains raw HTML for 929 unlabeled webpages
 
 - `img/`: Images for the vignette
 
