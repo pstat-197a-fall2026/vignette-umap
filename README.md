@@ -22,6 +22,7 @@ UMAP is a tool for both visualization of high dimensional data and for non-linea
 
 ## Repository Contents
 
+```
 vignette-umap/
 ├── README.md                          # Project introduction
 ├── vignette.qmd                       # Final Quarto source for the vignette
@@ -48,34 +49,7 @@ vignette-umap/
     ├── claims-umap-2d.png             # 2D UMAP of claims pages, colored by class
     └── claims-knn-accuracy.png        # Held-out kNN accuracy: 77.5% (10 UMAP features)
                                        #   vs 81.0% (5,367 TF-IDF features) vs 54.4% (baseline)
-
-- `vignette.qmd`: Final quarto source for the vignette
-
-- `vignette.html`: Final rendered version of the vignette
-
-- `scripts/`: Scripts used for drafting the vignette
-
-  - `claims-preprocessing.R`: Runs UMAP on the Module 2 claims TF-IDF data (2D for plotting, 10D as extracted features), evaluates with kNN on held-out pages, and saves the results to `claims-results.RData`
- 
-  - `applyingtoclaimsdata.qmd`: Applies UMAP to the Module 2 claims text data in five steps (dataset, prepare, UMAP, visualize, evaluate), where 10 UMAP features reach 77.5% kNN accuracy on held-out pages versus 81.0% for all 5,367 TF-IDF features
-
-- `data`: Data used in the vignette
-
-  - `processed/`: Processed claims results data
- 
-    - `claims-results.Rdata`: Contains class counts, the data summary, the 2D UMAP embedding, the kNN accuracy table, the confusion matrix, timings, and the settings `n_feat` and `k`
-
-  - `raw/`: Original unmodified data
- 
-    - `claims-raw.RData`: Contains raw HTML and class labels for 2,165 webpages
-
-    - `claims-test.RData`: Contains raw HTML for 929 unlabeled webpages
-
-- `img/`: Images for the vignette
-
-  - `claims-knn-accuracy.png`: Held-out kNN accuracy for three feature sets: 10 UMAP features reach 77.5%, close to the 81.0% from all 5,367 TF-IDF features and well above the 54.4% majority-class baseline
- 
-  - `claims-umap-2d.png`: A 2D UMAP of the claims pages' TF-IDF features, colored by class, showing some structure but heavy overlap between relevant and non-relevant pages 
+```
 
 ## References
  
