@@ -28,6 +28,8 @@ UMAP is a tool for both visualization of high dimensional data and for non-linea
 
 - `scripts/`: Scripts used for making the vignette
 
+  - `part4-preprocessing`: Runs UMAP on the Module 2 claims TF-IDF data (2D for plotting, 10D as extracted features), evaluates with kNN on held-out pages, and saves the results to `claims-results.RData`
+
 - `data`: Data used in the vignette
 
   - `processed/`: processed claims results data
