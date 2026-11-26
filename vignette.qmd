@@ -19,17 +19,23 @@ The first assumption made on the data is that it is uniformly distributed on the
 
 ## How UMAP Works
 
-UMAP first builds a weighted graph by identifying the k closest neighbors to each data point, like KNN. This graph captures the shape of the data. UMAP then redraws this graph in 2D, using SGD to best retain the neighboring relationship between points. This lower dimensional graph allows you to see possible groupings in the data. You can then refit UMAP with more dimensions than 2, which lets you use it as a tool for dimensionality reduction as well.
+UMAP first builds a weighted graph to capture the shape of the data. It does this by identifying the k-closest neighbors for each data point, similar to KNN. UMAP then places the points in lower dimensions, starting from a layout computed from the graph itself (spectral embedding). Then it uses Stochastic Gradient Descent to optimize and best retain the neighboring relationship between points. A 2D or 3D plot allows you to visually inspect the clusters to see possible groupings in the data. Redrawing the graph in higher dimensions works as a form of feature extraction, where each dimension acts as a feature. 
 
-#### Pros and Cons
+#### Pros
 
--   Fast and scalable
+- Fast and scalable relative to t-SNE (another nonlinear dimensionality reduction technique)
 
--   Works with unsupervised data
+- Works with unsupervised data
 
--   Works with non linear data
+- Works with non linear data
 
--   Feature extraction, not selection
+#### Cons
+
+- Slower than PCA
+
+- Feature extraction, not selection (extracted features aren't directly interpretable)
+
+- Preserves neighbors, not actual distances (shape of clusters and size of gaps shouldn’t be over-interpreted)
 
 ## Small Example: Exploring Customer Shopping Patterns with UMAP
 
